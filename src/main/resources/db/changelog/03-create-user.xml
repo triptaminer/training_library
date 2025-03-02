@@ -10,7 +10,9 @@
             <column name="id" type="bigint">
                 <constraints primaryKey="true" foreignKeyName="fk_user_person" references="person(id)"/>
             </column>
-            <column name="email" type="varchar(255)" unique="true"/>
+            <column name="email" type="varchar(255)">
+                <constraints unique="true"/>
+            </column>
             <column name="address" type="varchar(255)"/>
             <column name="phone" type="varchar(20)"/>
         </createTable>
