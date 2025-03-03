@@ -8,5 +8,6 @@
     <include file="db/changelog/01-create-person.xml"/>
     <include file="db/changelog/02-create-author.xml"/>
     <include file="db/changelog/03-create-user.xml"/>
+    <include file="db/changelog/04-add-version-column.xml"/>
 
 </databaseChangeLog>
