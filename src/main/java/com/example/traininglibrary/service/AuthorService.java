@@ -29,6 +29,12 @@ public class AuthorService {
     }
 
     public AuthorDto createAuthor(AuthorNewDto authorDto) {
+
+        if (authorDto.deathDate() != null && authorDto.birthDate() != null
+                && !authorDto.deathDate().isAfter(authorDto.birthDate())) {
+            throw new IllegalArgumentException("Death date must be after birth date");
+        }
+
         Author author = new Author();
         author.setName(authorDto.name());
         author.setBirthDate(authorDto.birthDate());

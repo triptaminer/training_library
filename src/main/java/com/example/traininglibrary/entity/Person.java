@@ -17,11 +17,11 @@ import java.time.LocalDate;
 @Schema(description = "Persons (authors and users) main class")
 public abstract class Person extends BaseIncrementalEntity {
 
-    @Schema(description = "Persons name")
+    @Schema(description = "Person name", example = "John Smith")
     @JsonProperty("name")
     private String name;
 
-    @Schema(description = "Date of birth of person")
+    @Schema(description = "Date of birth of person", example = "1952-09-02")
     @JsonProperty("birthDate")
     private LocalDate birthDate;
 
