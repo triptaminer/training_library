@@ -7,13 +7,13 @@
 
     <changeSet id="4" author="triptaminer">
         <addColumn tableName="book_user">
-            <column name="version" type="int" defaultValueNumeric="0">
+            <column name="version" type="bigint" defaultValueNumeric="0">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
 
         <addColumn tableName="author">
-            <column name="version" type="int" defaultValueNumeric="0">
+            <column name="version" type="bigint" defaultValueNumeric="0">
                 <constraints nullable="false"/>
             </column>
         </addColumn>

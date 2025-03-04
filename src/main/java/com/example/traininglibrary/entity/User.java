@@ -1,4 +1,4 @@
-package com.example.traininglibrary.model;
+package com.example.traininglibrary.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

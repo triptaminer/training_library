@@ -1,6 +1,7 @@
 package com.example.traininglibrary.controller;
 
-import com.example.traininglibrary.model.Author;
+import com.example.traininglibrary.dto.AuthorDto;
+import com.example.traininglibrary.dto.AuthorNewDto;
 import com.example.traininglibrary.service.AuthorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,19 +18,19 @@ public class AuthorController {
     }
 
     @GetMapping
-    public List<Author> getAllAuthors() {
+    public List<AuthorDto> getAllAuthors() {
         return authorService.getAllAuthors();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Author> getAuthorById(@PathVariable Long id) {
+    public ResponseEntity<AuthorDto> getAuthorById(@PathVariable Long id) {
         return authorService.getAuthorById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Author createAuthor(@RequestBody Author author) {
+    public AuthorDto createAuthor(@RequestBody AuthorNewDto author) {
         return authorService.createAuthor(author);
     }
 }
