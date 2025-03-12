@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="2025-03-11-1" author="triptaminer">
+
+        <!-- INSERT INTO PERSON (superclass entity) -->
+        <insert tableName="person">
+            <column name="id" value="1"/>
+            <column name="version" value="0"/>
+            <column name="name" value="William Shakespeare"/>
+            <column name="birth_date" value="1564-04-23"/>
+        </insert>
+
+        <insert tableName="person">
+            <column name="id" value="2"/>
+            <column name="version" value="0"/>
+            <column name="name" value="Jane Austen"/>
+            <column name="birth_date" value="1775-12-16"/>
+        </insert>
+
+        <insert tableName="person">
+            <column name="id" value="3"/>
+            <column name="version" value="0"/>
+            <column name="name" value="Mark Twain"/>
+            <column name="birth_date" value="1835-11-30"/>
+        </insert>
+
+        <insert tableName="person">
+            <column name="id" value="4"/>
+            <column name="version" value="0"/>
+            <column name="name" value="George Orwell"/>
+            <column name="birth_date" value="1903-06-25"/>
+        </insert>
+
+        <insert tableName="person">
+            <column name="id" value="5"/>
+            <column name="version" value="0"/>
+            <column name="name" value="Agatha Christie"/>
+            <column name="birth_date" value="1890-09-15"/>
+        </insert>
+
+        <!-- INSERT INTO AUTHOR (subclass entity) -->
+        <insert tableName="author">
+            <column name="id" value="1"/>
+            <column name="death_date" value="1616-04-23"/>
+            <column name="bio" value="English playwright, poet, and actor, widely regarded as the greatest writer in the English language."/>
+        </insert>
+
+        <insert tableName="author">
+            <column name="id" value="2"/>
+            <column name="death_date" value="1817-07-18"/>
+            <column name="bio" value="English novelist known for her six major novels including 'Pride and Prejudice' and 'Sense and Sensibility'."/>
+        </insert>
+
+        <insert tableName="author">
+            <column name="id" value="3"/>
+            <column name="death_date" value="1910-04-21"/>
+            <column name="bio" value="American writer, humorist, and lecturer, best known for 'The Adventures of Tom Sawyer' and 'Adventures of Huckleberry Finn'."/>
+        </insert>
+
+        <insert tableName="author">
+            <column name="id" value="4"/>
+            <column name="death_date" value="1950-01-21"/>
+            <column name="bio" value="English novelist and essayist, famous for '1984' and 'Animal Farm', which critique totalitarian regimes."/>
+        </insert>
+
+        <insert tableName="author">
+            <column name="id" value="5"/>
+            <column name="death_date" value="1976-01-12"/>
+            <column name="bio" value="English writer known as the 'Queen of Crime', famous for her detective novels featuring Hercule Poirot and Miss Marple."/>
+        </insert>
+
+    </changeSet>
+</databaseChangeLog>

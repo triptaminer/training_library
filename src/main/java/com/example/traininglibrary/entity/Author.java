@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Schema(description = "Author of books")
 public class Author extends Person {
 
-    @Schema(description = "Dátum úmrtia", example = "2020-09-02")
+    @Schema(description = "Death date", example = "2020-09-02")
     private LocalDate deathDate;
 
     @Lob

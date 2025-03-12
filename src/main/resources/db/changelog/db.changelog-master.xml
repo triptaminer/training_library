@@ -11,4 +11,9 @@
     <include file="db/changelog/04-add-version-column.xml"/>
     <include file="db/changelog/05-add-bio-column.xml"/>
 
+
+
+
+    <include file="db/changelog/101-data-5-authors.xml"/>
+
 </databaseChangeLog>

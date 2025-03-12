@@ -6,6 +6,7 @@ import com.example.traininglibrary.dto.AuthorNewDto;
 import com.example.traininglibrary.repository.AuthorRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -24,8 +25,10 @@ public class AuthorService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<AuthorDto> getAuthorById(Long id) {
-        return authorRepository.findById(id).map(this::convertToDto);
+    public AuthorDto getAuthorById(Long id) {
+        return authorRepository.findById(id)
+                .map(this::convertToDto)
+                .orElseThrow(() -> new NoSuchElementException("Author with ID " + id + " not found"));
     }
 
     public AuthorDto createAuthor(AuthorNewDto authorDto) {
