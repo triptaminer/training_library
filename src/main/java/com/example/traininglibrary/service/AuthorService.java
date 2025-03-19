@@ -5,6 +5,8 @@ import com.example.traininglibrary.dto.AuthorDto;
 import com.example.traininglibrary.dto.AuthorNewDto;
 import com.example.traininglibrary.repository.AuthorRepository;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -33,20 +35,51 @@ public class AuthorService {
 
     public AuthorDto createAuthor(AuthorNewDto authorDto) {
 
-        if (authorDto.deathDate() != null && authorDto.birthDate() != null
-                && !authorDto.deathDate().isAfter(authorDto.birthDate())) {
+        validateUniqueAuthorAndDates(0L, authorDto.name(), authorDto.birthDate(), authorDto.deathDate());
+
+        Author author = fillAuthorFromDto(new Author(), authorDto);
+        System.out.println("id "+author.getId());
+        return convertToDto(authorRepository.save(author));
+    }
+
+    public AuthorDto updateAuthor(AuthorDto editedAuthor){
+
+        Author updatedAuthor = authorRepository.findById(editedAuthor.id())
+                .orElseThrow(() -> new NoSuchElementException("Author with ID " + editedAuthor.id() + " not found"));
+
+        validateUniqueAuthorAndDates(editedAuthor.id(), editedAuthor.name(), editedAuthor.birthDate(), editedAuthor.deathDate());
+        updatedAuthor = fillAuthorFromDto(updatedAuthor, editedAuthor);
+
+        return convertToDto(authorRepository.save(updatedAuthor));
+    }
+
+    private void validateUniqueAuthorAndDates(long id, String name, LocalDate birthDate, LocalDate deathDate) {
+        if (deathDate != null && birthDate != null && !deathDate.isAfter(birthDate)) {
             throw new IllegalArgumentException("Death date must be after birth date");
         }
 
-        Author author = new Author();
-        author.setName(authorDto.name());
-        author.setBirthDate(authorDto.birthDate());
-        author.setDeathDate(authorDto.deathDate());
-        author.setBio(authorDto.bio());
-        Author savedAuthor = authorRepository.save(author);
-        return convertToDto(savedAuthor);
+        Optional<Author> existingAuthor = authorRepository.findByNameAndBirthDate(name, birthDate);
+        if (existingAuthor.isPresent() && !existingAuthor.get().getId().equals(id)) {
+            throw new IllegalArgumentException("An author with the same name and birth date already exists.");
+        }
     }
 
+    private Author fillAuthorFromDto(Author author, Object dto) {
+        if (dto instanceof AuthorDto authorDto) {
+            author.setName(authorDto.name());
+            author.setBirthDate(authorDto.birthDate());
+            author.setDeathDate(authorDto.deathDate());
+            author.setBio(authorDto.bio());
+        } else if (dto instanceof AuthorNewDto authorNewDto) {
+            author.setName(authorNewDto.name());
+            author.setBirthDate(authorNewDto.birthDate());
+            author.setDeathDate(authorNewDto.deathDate());
+            author.setBio(authorNewDto.bio());
+        } else {
+            throw new IllegalArgumentException("Unsupported author DTO type");
+        }
+        return author;
+    }
     private AuthorDto convertToDto(Author author) {
         return new AuthorDto(author.getId(), author.getVersion(), author.getName(), author.getBirthDate(), author.getDeathDate(), author.getBio());
     }

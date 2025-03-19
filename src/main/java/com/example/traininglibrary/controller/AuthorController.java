@@ -56,4 +56,23 @@ public class AuthorController {
     public AuthorDto createAuthor(@Valid @RequestBody AuthorNewDto author) {
         return authorService.createAuthor(author);
     }
+
+    @Operation(summary = "Edits author", description = "Edits author identified by  ID in path with AuthorDto provided as body")
+    @PutMapping("/{id}")
+    public ResponseEntity<AuthorDto> createAuthor(
+            @Valid @RequestBody AuthorDto author,
+            @PathVariable("id")
+            @Positive
+            @Parameter(description = "Author ID", required = true)
+            Long id
+    ) {
+        if(!id.equals(author.id())){
+            throw new IllegalArgumentException("Path ID and body ID must match.");
+        }
+
+
+        return ResponseEntity.ok(authorService.updateAuthor(author));
+    }
+
+
 }
