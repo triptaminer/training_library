@@ -4,6 +4,9 @@ import com.example.traininglibrary.entity.Author;
 import com.example.traininglibrary.dto.AuthorDto;
 import com.example.traininglibrary.dto.AuthorNewDto;
 import com.example.traininglibrary.repository.AuthorRepository;
+import jakarta.persistence.OptimisticLockException;
+import jakarta.validation.constraints.Positive;
+import org.hibernate.bytecode.enhance.VersionMismatchException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -38,7 +41,6 @@ public class AuthorService {
         validateUniqueAuthorAndDates(0L, authorDto.name(), authorDto.birthDate(), authorDto.deathDate());
 
         Author author = fillAuthorFromDto(new Author(), authorDto);
-        System.out.println("id "+author.getId());
         return convertToDto(authorRepository.save(author));
     }
 
@@ -47,10 +49,27 @@ public class AuthorService {
         Author updatedAuthor = authorRepository.findById(editedAuthor.id())
                 .orElseThrow(() -> new NoSuchElementException("Author with ID " + editedAuthor.id() + " not found"));
 
+        if (!updatedAuthor.getVersion().equals(editedAuthor.version())) {
+            throw new OptimisticLockException("Version mismatch");
+        }
         validateUniqueAuthorAndDates(editedAuthor.id(), editedAuthor.name(), editedAuthor.birthDate(), editedAuthor.deathDate());
         updatedAuthor = fillAuthorFromDto(updatedAuthor, editedAuthor);
+        updatedAuthor.setVersion(updatedAuthor.getVersion() + 1);
 
         return convertToDto(authorRepository.save(updatedAuthor));
+    }
+
+    public void deleteAuthor(AuthorDto authorDto) {
+
+        Author author = authorRepository.findById(authorDto.id())
+                .orElseThrow(() -> new NoSuchElementException("Author with ID " + authorDto.id() + " not found"));
+        if(!author.getVersion().equals(authorDto.version())){
+            throw new OptimisticLockException("Version mismatch");
+        }
+        if(!convertToDto(author).equals(authorDto)){
+            throw new IllegalStateException("Data mismatch: Provided data does not match database record for Author ID " + authorDto.id());
+        }
+        authorRepository.delete(author);
     }
 
     private void validateUniqueAuthorAndDates(long id, String name, LocalDate birthDate, LocalDate deathDate) {
@@ -80,7 +99,9 @@ public class AuthorService {
         }
         return author;
     }
+
     private AuthorDto convertToDto(Author author) {
         return new AuthorDto(author.getId(), author.getVersion(), author.getName(), author.getBirthDate(), author.getDeathDate(), author.getBio());
     }
+
 }

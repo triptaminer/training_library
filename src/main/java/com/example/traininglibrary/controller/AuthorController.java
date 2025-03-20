@@ -11,10 +11,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -23,7 +24,10 @@ import java.util.List;
 @Tag(name = "Authors", description = "Operations related to authors")
 @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Author found", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "201", description = "Author created", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "204", description = "Author removed", content = @Content(mediaType = "application/json")),
         @ApiResponse(responseCode = "404", description = "Author doesn't exists", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "409", description = "Author doesn't match database record", content = @Content(mediaType = "application/json")),
         @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content(mediaType = "application/json"))
 })
 public class AuthorController {
@@ -53,13 +57,16 @@ public class AuthorController {
 
     @Operation(summary = "Add new author", description = "Adds new author using AuthorNewDto")
     @PostMapping
-    public AuthorDto createAuthor(@Valid @RequestBody AuthorNewDto author) {
-        return authorService.createAuthor(author);
+    public ResponseEntity<AuthorDto> createAuthor(@Valid @RequestBody AuthorNewDto author) {
+        AuthorDto created = authorService.createAuthor(author);
+        URI location = URI.create("/authors/" + created.id());
+
+        return ResponseEntity.created(location).body(created);
     }
 
     @Operation(summary = "Edits author", description = "Edits author identified by  ID in path with AuthorDto provided as body")
     @PutMapping("/{id}")
-    public ResponseEntity<AuthorDto> createAuthor(
+    public ResponseEntity<AuthorDto> updateAuthor(
             @Valid @RequestBody AuthorDto author,
             @PathVariable("id")
             @Positive
@@ -69,10 +76,21 @@ public class AuthorController {
         if(!id.equals(author.id())){
             throw new IllegalArgumentException("Path ID and body ID must match.");
         }
-
-
         return ResponseEntity.ok(authorService.updateAuthor(author));
     }
 
-
+    @Operation(summary = "Removes author", description = "Removes author by ID")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteAuthor(
+            @Valid @RequestBody AuthorDto author,
+            @PathVariable("id")
+            @Positive
+            @Parameter(description = "Author ID", required = true)
+            Long id) {
+        if(!id.equals(author.id())){
+            throw new IllegalArgumentException("Path ID and body ID must match.");
+        }
+        authorService.deleteAuthor(author);
+        return ResponseEntity.noContent().build();
+    }
 }

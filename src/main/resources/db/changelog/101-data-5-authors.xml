@@ -75,4 +75,11 @@
         </insert>
 
     </changeSet>
+
+    <changeSet id="reset-id-sequence" author="triptaminer">
+        <sql>
+            ALTER TABLE person ALTER COLUMN id RESTART WITH (SELECT MAX(id) + 1 FROM person);
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>
