@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <!-- Insert example books -->
+    <changeSet id="20240320-insert-example-books" author="triptaminer">
+        <!-- Shakespeare (1) -->
+        <insert tableName="book">
+            <column name="id" valueNumeric="1"/>
+            <column name="version" valueNumeric="0"/>
+            <column name="title" value="Hamlet"/>
+            <column name="published_year" valueNumeric="1603"/>
+            <column name="genre" value="FICTION"/>
+        </insert>
+
+        <!-- Jane Austen (1) -->
+        <insert tableName="book">
+            <column name="id" valueNumeric="2"/>
+            <column name="version" valueNumeric="0"/>
+            <column name="title" value="Pride and Prejudice"/>
+            <column name="published_year" valueNumeric="1813"/>
+            <column name="genre" value="ROMANCE"/>
+        </insert>
+
+        <!-- Mark Twain (1) -->
+        <insert tableName="book">
+            <column name="id" valueNumeric="3"/>
+            <column name="version" valueNumeric="0"/>
+            <column name="title" value="Adventures of Huckleberry Finn"/>
+            <column name="published_year" valueNumeric="1884"/>
+            <column name="genre" value="FICTION"/>
+        </insert>
+
+        <!-- George Orwell (3 knihy) -->
+        <insert tableName="book">
+            <column name="id" valueNumeric="4"/>
+            <column name="version" valueNumeric="0"/>
+            <column name="title" value="1984"/>
+            <column name="published_year" valueNumeric="1949"/>
+            <column name="genre" value="FICTION"/>
+        </insert>
+
+        <insert tableName="book">
+            <column name="id" valueNumeric="5"/>
+            <column name="version" valueNumeric="0"/>
+            <column name="title" value="Animal Farm"/>
+            <column name="published_year" valueNumeric="1945"/>
+            <column name="genre" value="FICTION"/>
+        </insert>
+
+        <insert tableName="book">
+            <column name="id" valueNumeric="6"/>
+            <column name="version" valueNumeric="0"/>
+            <column name="title" value="Homage to Catalonia"/>
+            <column name="published_year" valueNumeric="1938"/>
+            <column name="genre" value="NONFICTION"/>
+        </insert>
+
+        <!-- Agatha Christie (5 kníh) -->
+        <insert tableName="book">
+            <column name="id" valueNumeric="7"/>
+            <column name="version" valueNumeric="0"/>
+            <column name="title" value="Murder on the Orient Express"/>
+            <column name="published_year" valueNumeric="1934"/>
+            <column name="genre" value="MYSTERY"/>
+        </insert>
+
+        <insert tableName="book">
+            <column name="id" valueNumeric="8"/>
+            <column name="version" valueNumeric="0"/>
+            <column name="title" value="And Then There Were None"/>
+            <column name="published_year" valueNumeric="1939"/>
+            <column name="genre" value="MYSTERY"/>
+        </insert>
+
+        <insert tableName="book">
+            <column name="id" valueNumeric="9"/>
+            <column name="version" valueNumeric="0"/>
+            <column name="title" value="The Murder of Roger Ackroyd"/>
+            <column name="published_year" valueNumeric="1926"/>
+            <column name="genre" value="MYSTERY"/>
+        </insert>
+
+        <insert tableName="book">
+            <column name="id" valueNumeric="10"/>
+            <column name="version" valueNumeric="0"/>
+            <column name="title" value="Death on the Nile"/>
+            <column name="published_year" valueNumeric="1937"/>
+            <column name="genre" value="MYSTERY"/>
+        </insert>
+
+        <insert tableName="book">
+            <column name="id" valueNumeric="11"/>
+            <column name="version" valueNumeric="0"/>
+            <column name="title" value="The ABC Murders"/>
+            <column name="published_year" valueNumeric="1936"/>
+            <column name="genre" value="MYSTERY"/>
+        </insert>
+
+        <!-- book-author relations -->
+        <insert tableName="book_author">
+            <column name="book_id" valueNumeric="1"/>
+            <column name="author_id" valueNumeric="1"/>
+        </insert>
+
+        <insert tableName="book_author">
+            <column name="book_id" valueNumeric="2"/>
+            <column name="author_id" valueNumeric="2"/>
+        </insert>
+
+        <insert tableName="book_author">
+            <column name="book_id" valueNumeric="3"/>
+            <column name="author_id" valueNumeric="3"/>
+        </insert>
+
+        <!-- Orwell -->
+        <insert tableName="book_author">
+            <column name="book_id" valueNumeric="4"/>
+            <column name="author_id" valueNumeric="4"/>
+        </insert>
+        <insert tableName="book_author">
+            <column name="book_id" valueNumeric="5"/>
+            <column name="author_id" valueNumeric="4"/>
+        </insert>
+        <insert tableName="book_author">
+            <column name="book_id" valueNumeric="6"/>
+            <column name="author_id" valueNumeric="4"/>
+        </insert>
+
+        <!-- Christie -->
+        <insert tableName="book_author">
+            <column name="book_id" valueNumeric="7"/>
+            <column name="author_id" valueNumeric="5"/>
+        </insert>
+        <insert tableName="book_author">
+            <column name="book_id" valueNumeric="8"/>
+            <column name="author_id" valueNumeric="5"/>
+        </insert>
+        <insert tableName="book_author">
+            <column name="book_id" valueNumeric="9"/>
+            <column name="author_id" valueNumeric="5"/>
+        </insert>
+        <insert tableName="book_author">
+            <column name="book_id" valueNumeric="10"/>
+            <column name="author_id" valueNumeric="5"/>
+        </insert>
+        <insert tableName="book_author">
+            <column name="book_id" valueNumeric="11"/>
+            <column name="author_id" valueNumeric="5"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="reset-id-sequence" author="triptaminer">
+        <sql>
+            ALTER TABLE book ALTER COLUMN id RESTART WITH (SELECT MAX(id) + 1 FROM book);
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

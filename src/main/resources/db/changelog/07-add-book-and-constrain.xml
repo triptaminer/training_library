@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="20240320-create-book-table" author="triptaminer">
+        <createTable tableName="book">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="version" type="INT" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="published_year" type="INT"/>
+            <column name="genre" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addUniqueConstraint
+                tableName="book"
+                columnNames="title, published_year"
+                constraintName="uc_book_title_published_year"/>
+    </changeSet>
+
+    <changeSet id="20240320-create-book-author-table" author="triptaminer">
+        <createTable tableName="book_author">
+            <column name="book_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey
+                tableName="book_author"
+                columnNames="book_id, author_id"
+                constraintName="pk_book_author"/>
+
+        <addForeignKeyConstraint
+                baseTableName="book_author"
+                baseColumnNames="book_id"
+                constraintName="fk_book_author_book"
+                referencedTableName="book"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint
+                baseTableName="book_author"
+                baseColumnNames="author_id"
+                constraintName="fk_book_author_author"
+                referencedTableName="author"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+    </changeSet>
+
+</databaseChangeLog>
