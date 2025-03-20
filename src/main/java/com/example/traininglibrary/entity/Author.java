@@ -1,12 +1,16 @@
 package com.example.traininglibrary.entity;
 
+import com.example.traininglibrary.dto.BookMiniDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToMany;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -20,4 +24,8 @@ public class Author extends Person {
     @Lob
     @Schema(description = "Bio of author")
     private String bio;
+
+    @ManyToMany(mappedBy = "authors")
+    @Schema(description = "List of books")
+    private Set<Book> books = new HashSet<>();
 }

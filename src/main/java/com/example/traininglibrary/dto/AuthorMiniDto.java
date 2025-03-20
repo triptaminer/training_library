@@ -10,23 +10,15 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Set;
 
-@Schema(description = "DTO for sending author", allOf = {Author.class})
-public record AuthorDto(
+@Schema(description = "DTO for sending author without books", allOf = {Author.class})
+public record AuthorMiniDto(
         Long id,
-        Long version,
 
-        @NotBlank(message = "Name is required")
-        @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
         String name,
 
-        @NotNull(message = "Birth date is required")
-        @Past(message = "Birth date must be in the past")
         LocalDate birthDate,
 
-        @Past(message = "Death date must be in the past")
         LocalDate deathDate,
 
-        String bio,
-
-        Set<BookMiniDto> books
+        String bio
 ) {}

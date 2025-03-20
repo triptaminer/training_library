@@ -11,6 +11,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -38,10 +41,16 @@ public class AuthorController {
         this.authorService = authorService;
     }
 
-    @Operation(summary = "Get all authors", description = "Returns all authors (paged)")
+    @Operation(summary = "Get all authors", description = "Pageable - returns all authors (paged)")
     @GetMapping
-    public List<AuthorDto> getAllAuthors() {
-        return authorService.getAllAuthors();
+    public ResponseEntity<Page<AuthorDto>> getAllAuthors(@ParameterObject Pageable pageable) {
+        return ResponseEntity.ok(authorService.getAllAuthors(pageable));
+    }
+
+    @Operation(summary = "Get all authors with books", description = "Pageable - returns all authors (paged)")
+    @GetMapping("/with-books")
+    public ResponseEntity<Page<AuthorDto>> getAllAuthorsWithBooks(@ParameterObject Pageable pageable) {
+        return ResponseEntity.ok(authorService.getAllAuthorsWithBooks(pageable));
     }
 
     @Operation(summary = "Get author by id", description = "Returns author object by id")

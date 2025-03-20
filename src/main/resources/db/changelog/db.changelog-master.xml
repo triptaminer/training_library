@@ -17,5 +17,6 @@
 
 
     <include file="db/changelog/101-data-5-authors.xml"/>
+    <include file="db/changelog/102-data-11-books.xml"/>
 
 </databaseChangeLog>

@@ -1,16 +1,16 @@
 package com.example.traininglibrary.service;
 
+import com.example.traininglibrary.dto.BookMiniDto;
 import com.example.traininglibrary.entity.Author;
 import com.example.traininglibrary.dto.AuthorDto;
 import com.example.traininglibrary.dto.AuthorNewDto;
 import com.example.traininglibrary.repository.AuthorRepository;
 import jakarta.persistence.OptimisticLockException;
-import jakarta.validation.constraints.Positive;
-import org.hibernate.bytecode.enhance.VersionMismatchException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,10 +24,14 @@ public class AuthorService {
         this.authorRepository = authorRepository;
     }
 
-    public List<AuthorDto> getAllAuthors() {
-        return authorRepository.findAll().stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+    public Page<AuthorDto> getAllAuthors(Pageable pageable) {
+        return authorRepository.findAll(pageable)
+                .map(this::convertToDto);
+    }
+
+    public Page<AuthorDto> getAllAuthorsWithBooks(Pageable pageable) {
+        return authorRepository.findAllWithBooks(pageable)
+                .map(this::convertToDto);
     }
 
     public AuthorDto getAuthorById(Long id) {
@@ -101,7 +105,22 @@ public class AuthorService {
     }
 
     private AuthorDto convertToDto(Author author) {
-        return new AuthorDto(author.getId(), author.getVersion(), author.getName(), author.getBirthDate(), author.getDeathDate(), author.getBio());
+        return new AuthorDto(
+                author.getId(),
+                author.getVersion(),
+                author.getName(),
+                author.getBirthDate(),
+                author.getDeathDate(),
+                author.getBio(),
+                //todo point to bookconvertor later
+                author.getBooks().stream()
+                        .map(book -> new BookMiniDto(
+                                book.getId(),
+                                book.getTitle(),
+                                book.getPublishedYear(),
+                                book.getGenre()
+                        )).collect(Collectors.toSet())
+        );
     }
 
 }
