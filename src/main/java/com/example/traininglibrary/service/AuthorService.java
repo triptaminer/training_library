@@ -7,6 +7,7 @@ import com.example.traininglibrary.dto.AuthorNewDto;
 import com.example.traininglibrary.repository.AuthorRepository;
 import jakarta.persistence.OptimisticLockException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,8 @@ import java.time.LocalDate;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.List;
+
 
 @Service
 public class AuthorService {
@@ -30,8 +33,13 @@ public class AuthorService {
     }
 
     public Page<AuthorDto> getAllAuthorsWithBooks(Pageable pageable) {
-        return authorRepository.findAllWithBooks(pageable)
-                .map(this::convertToDto);
+
+        List<Long> pagedAuthors = authorRepository.findAll(pageable).stream().map(Author::getId).toList();
+
+        return new PageImpl<>(authorRepository.findAllWithBooksByIdIn(pagedAuthors)
+                .stream()
+                .map(this::convertToDto)
+                .toList());
     }
 
     public AuthorDto getAuthorById(Long id) {
@@ -105,6 +113,7 @@ public class AuthorService {
     }
 
     private AuthorDto convertToDto(Author author) {
+        System.out.println("books: " + author.getBooks().size());
         return new AuthorDto(
                 author.getId(),
                 author.getVersion(),

@@ -23,7 +23,7 @@ public class Book extends BaseIncrementalEntity {
     @Column(nullable = false)
     private Genre genre;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "book_author",
             joinColumns = @JoinColumn(name = "book_id"),

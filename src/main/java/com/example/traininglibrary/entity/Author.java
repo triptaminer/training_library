@@ -3,6 +3,7 @@ package com.example.traininglibrary.entity;
 import com.example.traininglibrary.dto.BookMiniDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import lombok.Data;
@@ -25,7 +26,7 @@ public class Author extends Person {
     @Schema(description = "Bio of author")
     private String bio;
 
-    @ManyToMany(mappedBy = "authors")
+    @ManyToMany(mappedBy = "authors", fetch = FetchType.EAGER)
     @Schema(description = "List of books")
     private Set<Book> books = new HashSet<>();
 }

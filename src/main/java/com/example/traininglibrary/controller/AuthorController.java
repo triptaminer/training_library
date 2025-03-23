@@ -41,13 +41,13 @@ public class AuthorController {
         this.authorService = authorService;
     }
 
-    @Operation(summary = "Get all authors", description = "Pageable - returns all authors (paged)")
+    @Operation(summary = "Get all authors", description = "Returns all authors (paged)")
     @GetMapping
     public ResponseEntity<Page<AuthorDto>> getAllAuthors(@ParameterObject Pageable pageable) {
         return ResponseEntity.ok(authorService.getAllAuthors(pageable));
     }
 
-    @Operation(summary = "Get all authors with books", description = "Pageable - returns all authors (paged)")
+    @Operation(summary = "Get all authors with books", description = "Returns all authors with books (paged)")
     @GetMapping("/with-books")
     public ResponseEntity<Page<AuthorDto>> getAllAuthorsWithBooks(@ParameterObject Pageable pageable) {
         return ResponseEntity.ok(authorService.getAllAuthorsWithBooks(pageable));
