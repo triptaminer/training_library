@@ -43,7 +43,7 @@ public class AuthorService {
     }
 
     public AuthorDto getAuthorById(Long id) {
-        return authorRepository.findById(id)
+        return authorRepository.findByIdWithBooks(id)
                 .map(this::convertToDto)
                 .orElseThrow(() -> new NoSuchElementException("Author with ID " + id + " not found"));
     }
@@ -113,7 +113,8 @@ public class AuthorService {
     }
 
     private AuthorDto convertToDto(Author author) {
-        System.out.println("books: " + author.getBooks().size());
+        System.out.println(author.getId() + " books: " + author.getBooks().size());
+        author.getBooks().forEach(b -> System.out.println("  - book: " + b.getTitle()));
         return new AuthorDto(
                 author.getId(),
                 author.getVersion(),
@@ -128,7 +129,7 @@ public class AuthorService {
                                 book.getTitle(),
                                 book.getPublishedYear(),
                                 book.getGenre()
-                        )).collect(Collectors.toSet())
+                        )).collect(Collectors.toList())
         );
     }
 

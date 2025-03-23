@@ -14,12 +14,20 @@ import org.springframework.lang.NonNullApi;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface AuthorRepository extends JpaRepository<Author, Long> {
 
     @EntityGraph(attributePaths = {"books"})
     @NonNull
     Optional<Author> findById(Long id);
+
+    @Query("""
+    SELECT a FROM Author a
+    LEFT JOIN FETCH a.books
+    WHERE a.id = :id
+""")
+    Optional<Author> findByIdWithBooks(@Param("id") Long id);
 
     Optional<Author> findByNameAndBirthDate(String name, LocalDate birthDate);
 
@@ -33,4 +41,4 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
     LEFT JOIN FETCH a.books
     WHERE a.id IN :authorIds
     """)
-    List<Author> findAllWithBooksByIdIn(@Param("authorIds") List<Long> authorIds);}
+    Set<Author> findAllWithBooksByIdIn(@Param("authorIds") List<Long> authorIds);}
