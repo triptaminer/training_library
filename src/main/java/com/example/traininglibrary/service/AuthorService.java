@@ -4,6 +4,7 @@ import com.example.traininglibrary.entity.Author;
 import com.example.traininglibrary.dto.AuthorDto;
 import com.example.traininglibrary.dto.AuthorNewDto;
 import com.example.traininglibrary.mapper.AuthorMapper;
+import com.example.traininglibrary.mapper.AuthorMiniDtoMapper;
 import com.example.traininglibrary.projection.AuthorIdOnly;
 import com.example.traininglibrary.repository.AuthorRepository;
 import jakarta.persistence.OptimisticLockException;

@@ -100,6 +100,28 @@
             <column name="genre" value="MYSTERY"/>
         </insert>
 
+        <insert tableName="book">
+            <column name="id" value="12"/>
+            <column name="version" value="0"/>
+            <column name="title" value="Good Omens"/>
+            <column name="published_year" value="1990"/>
+            <column name="genre" value="FANTASY"/>
+        </insert>
+        <insert tableName="book">
+            <column name="id" value="13"/>
+            <column name="version" value="0"/>
+            <column name="title" value="The Cuckoo's Calling"/>
+            <column name="published_year" value="2013"/>
+            <column name="genre" value="MYSTERY"/>
+        </insert>
+        <insert tableName="book">
+            <column name="id" value="14"/>
+            <column name="version" value="0"/>
+            <column name="title" value="Welcome to Night Vale"/>
+            <column name="published_year" value="2015"/>
+            <column name="genre" value="FICTION"/>
+        </insert>
+
         <!-- book-author relations -->
         <insert tableName="book_author">
             <column name="book_id" valueNumeric="1"/>
@@ -151,6 +173,34 @@
             <column name="book_id" valueNumeric="11"/>
             <column name="author_id" valueNumeric="5"/>
         </insert>
+
+        <insert tableName="book_author">
+            <column name="book_id" value="12"/>
+            <column name="author_id" value="6"/>
+        </insert>
+        <insert tableName="book_author">
+            <column name="book_id" value="12"/>
+            <column name="author_id" value="7"/>
+        </insert>
+
+        <insert tableName="book_author">
+            <column name="book_id" value="13"/>
+            <column name="author_id" value="8"/>
+        </insert>
+        <insert tableName="book_author">
+            <column name="book_id" value="13"/>
+            <column name="author_id" value="9"/>
+        </insert>
+
+        <insert tableName="book_author">
+            <column name="book_id" value="14"/>
+            <column name="author_id" value="10"/>
+        </insert>
+        <insert tableName="book_author">
+            <column name="book_id" value="14"/>
+            <column name="author_id" value="11"/>
+        </insert>
+
 
     </changeSet>
 

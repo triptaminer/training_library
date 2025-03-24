@@ -1,20 +1,19 @@
 package com.example.traininglibrary.mapper;
 
 import com.example.traininglibrary.dto.AuthorDto;
-import com.example.traininglibrary.dto.AuthorMiniDto;
 import com.example.traininglibrary.dto.AuthorNewDto;
 import com.example.traininglibrary.entity.Author;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
-@Service
+@Component
 public class AuthorMapper {
 
-    private final BookMapper bookMapper;
+    private final BookMiniDtoMapper bookMiniDtoMapper;
 
-    public AuthorMapper(BookMapper bookMapper) {
-        this.bookMapper = bookMapper;
+    public AuthorMapper(BookMiniDtoMapper bookMiniDtoMapper) {
+        this.bookMiniDtoMapper = bookMiniDtoMapper;
     }
 
     public Author fillAuthorFromDto(Author author, Object dto) {
@@ -35,8 +34,6 @@ public class AuthorMapper {
 }
 
     public AuthorDto convertToDto(Author author) {
-        System.out.println(author.getId() + " books: " + author.getBooks().size());
-        author.getBooks().forEach(b -> System.out.println("  - book: " + b.getTitle()));
         return new AuthorDto(
                 author.getId(),
                 author.getVersion(),
@@ -45,19 +42,8 @@ public class AuthorMapper {
                 author.getDeathDate(),
                 author.getBio(),
                 author.getBooks().stream()
-                        .map(bookMapper::convertToMiniDto)
+                        .map(bookMiniDtoMapper::convertToMiniDto)
                         .collect(Collectors.toSet())
         );
     }
-
-    public AuthorMiniDto convertToMiniDto(Author author) {
-        return new AuthorMiniDto(
-                author.getId(),
-                author.getName(),
-                author.getBirthDate(),
-                author.getDeathDate(),
-                author.getBio()
-        );
-    }
-
 }

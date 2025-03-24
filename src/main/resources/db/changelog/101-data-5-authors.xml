@@ -43,6 +43,43 @@
             <column name="birth_date" value="1890-09-15"/>
         </insert>
 
+        <insert tableName="person">
+            <column name="id" value="6"/>
+            <column name="version" value="0"/>
+            <column name="name" value="Terry Pratchett"/>
+            <column name="birth_date" value="1948-04-28"/>
+        </insert>
+        <insert tableName="person">
+            <column name="id" value="7"/>
+            <column name="version" value="0"/>
+            <column name="name" value="Neil Gaiman"/>
+            <column name="birth_date" value="1960-11-10"/>
+        </insert>
+        <insert tableName="person">
+            <column name="id" value="8"/>
+            <column name="version" value="0"/>
+            <column name="name" value="J.K. Rowling"/>
+            <column name="birth_date" value="1965-07-31"/>
+        </insert>
+        <insert tableName="person">
+            <column name="id" value="9"/>
+            <column name="version" value="0"/>
+            <column name="name" value="Mark Billingham"/>
+            <column name="birth_date" value="1961-07-02"/>
+        </insert>
+        <insert tableName="person">
+            <column name="id" value="10"/>
+            <column name="version" value="0"/>
+            <column name="name" value="Joseph Fink"/>
+            <column name="birth_date" value="1984-04-15"/>
+        </insert>
+        <insert tableName="person">
+            <column name="id" value="11"/>
+            <column name="version" value="0"/>
+            <column name="name" value="Jeffrey Cranor"/>
+            <column name="birth_date" value="1977-10-20"/>
+        </insert>
+
         <!-- INSERT INTO AUTHOR (subclass entity) -->
         <insert tableName="author">
             <column name="id" value="1"/>
@@ -74,6 +111,30 @@
             <column name="bio" value="English writer known as the 'Queen of Crime', famous for her detective novels featuring Hercule Poirot and Miss Marple."/>
         </insert>
 
+        <insert tableName="author">
+            <column name="id" value="6"/>
+            <column name="bio" value="English author known for comic fantasy works, notably the Discworld series."/>
+        </insert>
+        <insert tableName="author">
+            <column name="id" value="7"/>
+            <column name="bio" value="English author known for fantasy, horror, and science fiction works including Coraline and American Gods."/>
+        </insert>
+        <insert tableName="author">
+            <column name="id" value="8"/>
+            <column name="bio" value="British author best known for the Harry Potter series, writing mystery novels under the pseudonym Robert Galbraith."/>
+        </insert>
+        <insert tableName="author">
+            <column name="id" value="9"/>
+            <column name="bio" value="English author and actor known for crime novels and thrillers."/>
+        </insert>
+        <insert tableName="author">
+            <column name="id" value="10"/>
+            <column name="bio" value="American writer and co-creator of the podcast Welcome to Night Vale."/>
+        </insert>
+        <insert tableName="author">
+            <column name="id" value="11"/>
+            <column name="bio" value="American writer and producer, co-creator of Welcome to Night Vale."/>
+        </insert>
     </changeSet>
 
     <changeSet id="reset-id-sequence" author="triptaminer">

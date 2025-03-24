@@ -1,20 +1,19 @@
 package com.example.traininglibrary.mapper;
 
 import com.example.traininglibrary.dto.BookDto;
-import com.example.traininglibrary.dto.BookMiniDto;
 import com.example.traininglibrary.dto.BookNewDto;
 import com.example.traininglibrary.entity.Book;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
-@Service
+@Component
 public class BookMapper {
 
-    private final AuthorMapper authorMapper;
+    private final AuthorMiniDtoMapper authorMiniDtoMapper;
 
-    public BookMapper(AuthorMapper authorMapper) {
-        this.authorMapper = authorMapper;
+    public BookMapper(AuthorMiniDtoMapper authorMiniDtoMapper) {
+        this.authorMiniDtoMapper = authorMiniDtoMapper;
     }
 
     public Book fillBookFromDto(Book book, Object dto) {
@@ -43,19 +42,8 @@ public class BookMapper {
                 book.getPublishedYear(),
                 book.getGenre(),
                 book.getAuthors().stream()
-                        .map(authorMapper::convertToMiniDto)
+                        .map(authorMiniDtoMapper::convertToMiniDto)
                         .collect(Collectors.toSet())
-        );
-    }
-
-    public BookMiniDto convertToMiniDto(Book book) {
-        System.out.println(book.getId() + " books: " + book.getAuthors().size());
-        book.getAuthors().forEach(b -> System.out.println("  - author: " + b.getName()));
-        return new BookMiniDto(
-                book.getId(),
-                book.getTitle(),
-                book.getPublishedYear(),
-                book.getGenre()
         );
     }
 }
