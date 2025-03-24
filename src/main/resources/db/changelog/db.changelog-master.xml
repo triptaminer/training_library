@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <include file="db/changelog/01-create-person.xml"/>
+    <include file="db/changelog/02-create-author.xml"/>
+    <include file="db/changelog/03-create-user.xml"/>
+    <include file="db/changelog/04-add-version-column.xml"/>
+    <include file="db/changelog/05-add-bio-column.xml"/>
+    <include file="db/changelog/06-add-unique-constrain.xml"/>
+    <include file="db/changelog/07-add-book-and-constrain.xml"/>
+
+
+
+
+    <include file="db/changelog/101-data-5-authors.xml"/>
+    <include file="db/changelog/102-data-11-books.xml"/>
+
+</databaseChangeLog>
