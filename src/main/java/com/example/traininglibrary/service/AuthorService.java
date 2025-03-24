@@ -1,9 +1,11 @@
 package com.example.traininglibrary.service;
 
+import com.example.traininglibrary.dto.AuthorMiniDto;
 import com.example.traininglibrary.dto.BookMiniDto;
 import com.example.traininglibrary.entity.Author;
 import com.example.traininglibrary.dto.AuthorDto;
 import com.example.traininglibrary.dto.AuthorNewDto;
+import com.example.traininglibrary.projection.AuthorIdOnly;
 import com.example.traininglibrary.repository.AuthorRepository;
 import jakarta.persistence.OptimisticLockException;
 import org.springframework.data.domain.Page;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,16 +37,23 @@ public class AuthorService {
 
     public Page<AuthorDto> getAllAuthorsWithBooks(Pageable pageable) {
 
-        List<Long> pagedAuthors = authorRepository.findAll(pageable).stream().map(Author::getId).toList();
+        Page<AuthorIdOnly> page = authorRepository.findAllProjectedBy(pageable);
+        List<Long> ids = page.stream().map(AuthorIdOnly::getId).toList();
 
-        return new PageImpl<>(authorRepository.findAllWithBooksByIdIn(pagedAuthors)
-                .stream()
+        List<Author> authorsWithBooks = authorRepository.findAllWithBooksByIdIn(ids);
+        Map<Long, Author> authorMap = authorsWithBooks.stream()
+                .collect(Collectors.toMap(Author::getId, a -> a));
+
+        List<AuthorDto> dtos = ids.stream()
+                .map(authorMap::get)
                 .map(this::convertToDto)
-                .toList());
+                .toList();
+
+        return new PageImpl<>(dtos, pageable, page.getTotalElements());
     }
 
     public AuthorDto getAuthorById(Long id) {
-        return authorRepository.findByIdWithBooks(id)
+        return authorRepository.findById(id)
                 .map(this::convertToDto)
                 .orElseThrow(() -> new NoSuchElementException("Author with ID " + id + " not found"));
     }
@@ -130,6 +140,18 @@ public class AuthorService {
                                 book.getPublishedYear(),
                                 book.getGenre()
                         )).collect(Collectors.toList())
+        );
+    }
+
+    AuthorMiniDto convertToMiniDto(Author author) {
+        System.out.println(author.getId() + " books: " + author.getBooks().size());
+        author.getBooks().forEach(b -> System.out.println("  - book: " + b.getTitle()));
+        return new AuthorMiniDto(
+                author.getId(),
+                author.getName(),
+                author.getBirthDate(),
+                author.getDeathDate(),
+                author.getBio()
         );
     }
 

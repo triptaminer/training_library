@@ -1,6 +1,7 @@
 package com.example.traininglibrary.repository;
 
 import com.example.traininglibrary.entity.Author;
+import com.example.traininglibrary.projection.AuthorIdOnly;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Range;
@@ -20,14 +21,9 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
 
     @EntityGraph(attributePaths = {"books"})
     @NonNull
-    Optional<Author> findById(Long id);
+    Optional<Author> findById(@Param("ïd") Long id);
 
-    @Query("""
-    SELECT a FROM Author a
-    LEFT JOIN FETCH a.books
-    WHERE a.id = :id
-""")
-    Optional<Author> findByIdWithBooks(@Param("id") Long id);
+    Page<AuthorIdOnly> findAllProjectedBy(Pageable pageable);
 
     Optional<Author> findByNameAndBirthDate(String name, LocalDate birthDate);
 
@@ -41,4 +37,4 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
     LEFT JOIN FETCH a.books
     WHERE a.id IN :authorIds
     """)
-    Set<Author> findAllWithBooksByIdIn(@Param("authorIds") List<Long> authorIds);}
+    List<Author> findAllWithBooksByIdIn(@Param("authorIds") List<Long> authorIds);}

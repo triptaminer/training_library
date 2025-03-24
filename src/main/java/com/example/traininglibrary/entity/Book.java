@@ -10,7 +10,7 @@ import java.util.Set;
 @Table(name = "book",
         uniqueConstraints = @UniqueConstraint(columnNames = {"title", "published_year"}))
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = "authors")
 public class Book extends BaseIncrementalEntity {
 
     @Column(nullable = false)

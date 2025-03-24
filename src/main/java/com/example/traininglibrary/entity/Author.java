@@ -15,7 +15,7 @@ import java.util.Set;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = "books")
 @Schema(description = "Author of books")
 public class Author extends Person {
 
