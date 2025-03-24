@@ -29,5 +29,5 @@ public record AuthorDto(
 
         String bio,
 
-        List<BookMiniDto> books
+        Set<BookMiniDto> books
 ) {}

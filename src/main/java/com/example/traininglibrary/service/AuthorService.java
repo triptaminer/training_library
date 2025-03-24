@@ -1,10 +1,9 @@
 package com.example.traininglibrary.service;
 
-import com.example.traininglibrary.dto.AuthorMiniDto;
-import com.example.traininglibrary.dto.BookMiniDto;
 import com.example.traininglibrary.entity.Author;
 import com.example.traininglibrary.dto.AuthorDto;
 import com.example.traininglibrary.dto.AuthorNewDto;
+import com.example.traininglibrary.mapper.AuthorMapper;
 import com.example.traininglibrary.projection.AuthorIdOnly;
 import com.example.traininglibrary.repository.AuthorRepository;
 import jakarta.persistence.OptimisticLockException;
@@ -14,25 +13,25 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.List;
 
 
 @Service
 public class AuthorService {
 
     private final AuthorRepository authorRepository;
+    private final AuthorMapper authorMapper;
 
-    public AuthorService(AuthorRepository authorRepository) {
+    public AuthorService(AuthorRepository authorRepository,
+                         AuthorMapper authorMapper) {
         this.authorRepository = authorRepository;
+        this.authorMapper = authorMapper;
     }
 
     public Page<AuthorDto> getAllAuthors(Pageable pageable) {
         return authorRepository.findAll(pageable)
-                .map(this::convertToDto);
+                .map(authorMapper::convertToDto);
     }
 
     public Page<AuthorDto> getAllAuthorsWithBooks(Pageable pageable) {
@@ -46,7 +45,7 @@ public class AuthorService {
 
         List<AuthorDto> dtos = ids.stream()
                 .map(authorMap::get)
-                .map(this::convertToDto)
+                .map(authorMapper::convertToDto)
                 .toList();
 
         return new PageImpl<>(dtos, pageable, page.getTotalElements());
@@ -54,7 +53,7 @@ public class AuthorService {
 
     public AuthorDto getAuthorById(Long id) {
         return authorRepository.findById(id)
-                .map(this::convertToDto)
+                .map(authorMapper::convertToDto)
                 .orElseThrow(() -> new NoSuchElementException("Author with ID " + id + " not found"));
     }
 
@@ -62,8 +61,8 @@ public class AuthorService {
 
         validateUniqueAuthorAndDates(0L, authorDto.name(), authorDto.birthDate(), authorDto.deathDate());
 
-        Author author = fillAuthorFromDto(new Author(), authorDto);
-        return convertToDto(authorRepository.save(author));
+        Author author = authorMapper.fillAuthorFromDto(new Author(), authorDto);
+        return authorMapper.convertToDto(authorRepository.save(author));
     }
 
     public AuthorDto updateAuthor(AuthorDto editedAuthor){
@@ -75,10 +74,10 @@ public class AuthorService {
             throw new OptimisticLockException("Version mismatch");
         }
         validateUniqueAuthorAndDates(editedAuthor.id(), editedAuthor.name(), editedAuthor.birthDate(), editedAuthor.deathDate());
-        updatedAuthor = fillAuthorFromDto(updatedAuthor, editedAuthor);
+        updatedAuthor = authorMapper.fillAuthorFromDto(updatedAuthor, editedAuthor);
         updatedAuthor.setVersion(updatedAuthor.getVersion() + 1);
 
-        return convertToDto(authorRepository.save(updatedAuthor));
+        return authorMapper.convertToDto(authorRepository.save(updatedAuthor));
     }
 
     public void deleteAuthor(AuthorDto authorDto) {
@@ -88,7 +87,7 @@ public class AuthorService {
         if(!author.getVersion().equals(authorDto.version())){
             throw new OptimisticLockException("Version mismatch");
         }
-        if(!convertToDto(author).equals(authorDto)){
+        if(!authorMapper.convertToDto(author).equals(authorDto)){
             throw new IllegalStateException("Data mismatch: Provided data does not match database record for Author ID " + authorDto.id());
         }
         authorRepository.delete(author);
@@ -105,54 +104,8 @@ public class AuthorService {
         }
     }
 
-    private Author fillAuthorFromDto(Author author, Object dto) {
-        if (dto instanceof AuthorDto authorDto) {
-            author.setName(authorDto.name());
-            author.setBirthDate(authorDto.birthDate());
-            author.setDeathDate(authorDto.deathDate());
-            author.setBio(authorDto.bio());
-        } else if (dto instanceof AuthorNewDto authorNewDto) {
-            author.setName(authorNewDto.name());
-            author.setBirthDate(authorNewDto.birthDate());
-            author.setDeathDate(authorNewDto.deathDate());
-            author.setBio(authorNewDto.bio());
-        } else {
-            throw new IllegalArgumentException("Unsupported author DTO type");
-        }
-        return author;
-    }
-
-    private AuthorDto convertToDto(Author author) {
-        System.out.println(author.getId() + " books: " + author.getBooks().size());
-        author.getBooks().forEach(b -> System.out.println("  - book: " + b.getTitle()));
-        return new AuthorDto(
-                author.getId(),
-                author.getVersion(),
-                author.getName(),
-                author.getBirthDate(),
-                author.getDeathDate(),
-                author.getBio(),
-                //todo point to bookconvertor later
-                author.getBooks().stream()
-                        .map(book -> new BookMiniDto(
-                                book.getId(),
-                                book.getTitle(),
-                                book.getPublishedYear(),
-                                book.getGenre()
-                        )).collect(Collectors.toList())
-        );
-    }
-
-    AuthorMiniDto convertToMiniDto(Author author) {
-        System.out.println(author.getId() + " books: " + author.getBooks().size());
-        author.getBooks().forEach(b -> System.out.println("  - book: " + b.getTitle()));
-        return new AuthorMiniDto(
-                author.getId(),
-                author.getName(),
-                author.getBirthDate(),
-                author.getDeathDate(),
-                author.getBio()
-        );
+    public List<Author> findAllById(List<Long> ids){
+        return authorRepository.findAllById(ids);
     }
 
 }
