@@ -3,7 +3,6 @@ package com.example.traininglibrary.exception;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
-import org.apache.commons.collections4.OrderedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -12,8 +11,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
@@ -35,7 +32,7 @@ public class GlobalExceptionHandler {
         errorDetails.put("message", message);
         errorDetails.put("timestamp", LocalDateTime.now());
         errorDetails.put("path", request.getRequestURI());
-        logger.error("Error '" + status.getReasonPhrase() + "' (" + status.value() + ") occurred... Message: " + message);
+        logger.error("Error '{}' ({}) occurred... Message: {}", status.getReasonPhrase(), status.value(), message);
         return errorDetails;
     }
 

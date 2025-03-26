@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.lang.NonNull;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 

@@ -3,7 +3,6 @@ package com.example.traininglibrary.service;
 import com.example.traininglibrary.dto.AuthorMiniDto;
 import com.example.traininglibrary.dto.BookDto;
 import com.example.traininglibrary.dto.BookNewDto;
-import com.example.traininglibrary.dto.BookMiniDto;
 import com.example.traininglibrary.entity.Author;
 import com.example.traininglibrary.entity.Book;
 import com.example.traininglibrary.mapper.BookMapper;
@@ -25,14 +24,13 @@ public class BookService {
 
     private final BookRepository bookRepository;
     private final AuthorService authorService;
-    private final AuthorRepository authorRepository;
     private BookMapper bookMapper;
 
     public BookService(BookRepository bookRepository,
-                       AuthorService authorService, AuthorRepository authorRepository, BookMapper bookMapper) {
+                       AuthorService authorService,
+                       BookMapper bookMapper) {
         this.bookRepository = bookRepository;
         this.authorService = authorService;
-        this.authorRepository = authorRepository;
         this.bookMapper = bookMapper;
     }
 

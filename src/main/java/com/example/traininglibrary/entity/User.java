@@ -1,20 +1,24 @@
 package com.example.traininglibrary.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import jakarta.persistence.UniqueConstraint;
+import lombok.*;
 
 @Entity
-@Table(name = "book_user")
-@Data
-@EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
+@NoArgsConstructor
+@Table(name = "book_user", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "email")
+})
 public class User extends Person {
 
+    @Column(nullable = false)
     private String email;
-
-    private String address;
 
     private String phone;
 
+    private String address;
 }

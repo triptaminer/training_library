@@ -1,6 +1,5 @@
 package com.example.traininglibrary.entity;
 
-import com.example.traininglibrary.dto.BookMiniDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

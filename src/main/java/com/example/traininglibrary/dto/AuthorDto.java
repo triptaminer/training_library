@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 
 @Schema(description = "DTO for sending author", allOf = {Author.class})

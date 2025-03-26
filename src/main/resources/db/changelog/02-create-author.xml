@@ -12,6 +12,13 @@
             </column>
             <column name="death_date" type="date"/>
         </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="author"
+                baseColumnNames="id"
+                referencedTableName="person"
+                referencedColumnNames="id"
+                constraintName="fk_book_author_person"/>
     </changeSet>
 
 </databaseChangeLog>

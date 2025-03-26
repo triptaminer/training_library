@@ -16,6 +16,13 @@
             <column name="address" type="varchar(255)"/>
             <column name="phone" type="varchar(20)"/>
         </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="book_user"
+                baseColumnNames="id"
+                referencedTableName="person"
+                referencedColumnNames="id"
+                constraintName="fk_book_user_person"/>
     </changeSet>
 
 </databaseChangeLog>
